@@ -1,0 +1,33 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "CP: Run",
+      "type": "process",
+      "command": "bash",
+      "args": ["${workspaceFolder}/run.sh"],
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": [],
+      "presentation": { "reveal": "silent", "panel": "dedicated", "clear": true },
+      "runOptions": { "instanceLimit": 1 }
+    },
+    {
+      "label": "CP: Watch (run on save)",
+      "type": "process",
+      "command": "bash",
+      "args": ["${workspaceFolder}/run.sh", "--watch"],
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": { "reveal": "silent", "panel": "dedicated" },
+      "runOptions": { "instanceLimit": 1 }
+    },
+    {
+      "label": "CP: Debug checks",
+      "type": "process",
+      "command": "bash",
+      "args": ["${workspaceFolder}/run.sh", "--debug"],
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    }
+  ]
+}

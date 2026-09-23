@@ -1,0 +1,15 @@
+{
+  "files.autoSave": "off",
+  "task.saveBeforeRun": "always",
+  "editor.fontSize": 15,
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
+  "editor.minimap.enabled": false,
+  "editor.bracketPairColorization.enabled": true,
+  "workbench.editor.enablePreview": false,
+  "files.associations": { "*.cpp": "cpp" },
+  "files.exclude": { ".build": true },
+  "C_Cpp.default.cppStandard": "c++17",
+  "C_Cpp.default.compilerPath": "/usr/bin/clang++",
+  "C_Cpp.default.defines": ["LOCAL"]
+}
