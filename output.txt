@@ -1,2 +1,0 @@
-
---- Run completed (no expected.txt to check) | Time: 186.17 ms ---

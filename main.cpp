@@ -23,6 +23,7 @@
 #include <vector>
 #include <sstream>
 
+
 using namespace std;
 using vi = vector<int>;
 using ll = long long;
@@ -44,74 +45,122 @@ template <class T> bool chmax(T& a, const T& b) {
     return false;
 }
 
-ll mod_pow(ll base, ll exponent, int mod = MOD) {
-    assert(mod > 0 && exponent >= 0);
-    base = (base % mod + mod) % mod;
-    ll answer = 1 % mod;
-    while (exponent) {
-        if (exponent & 1) answer = answer * base % mod;
-        base = base * base % mod;
-        exponent >>= 1;
-    }
-    return answer;
+// debugging different types
+template <class T>
+void print_debug(const T& x) {
+    cerr << x;
 }
 
-struct DSU {
-    vector<int> parent, size;
-    explicit DSU(int n) : parent(n), size(n, 1) {
-        iota(parent.begin(), parent.end(), 0);
-    }
-    int find(int x) {
-        while (x != parent[x]) {
-            parent[x] = parent[parent[x]];
-            x = parent[x];
-        }
-        return x;
-    }
-    bool unite(int a, int b) {
-        a = find(a); b = find(b);
-        if (a == b) return false;
-        if (size[a] < size[b]) swap(a, b);
-        parent[b] = a;
-        size[a] += size[b];
-        return true;
-    }
-};
-
-template <class T = ll> struct Fenwick {
-    int n;
-    vector<T> tree;
-    explicit Fenwick(int count) : n(count), tree(count + 1, T{}) {}
-    void add(int index, T delta) {
-        assert(0 <= index && index < n);
-        for (++index; index <= n; index += index & -index) tree[index] += delta;
-    }
-    T prefix_sum(int r) const {
-        assert(0 <= r && r <= n);
-        T result{};
-        for (; r > 0; r -= r & -r) result += tree[r];
-        return result;
-    }
-    T range_sum(int l, int r) const {
-        assert(0 <= l && l <= r && r <= n);
-        return prefix_sum(r) - prefix_sum(l);
-    }
-};
-
-#ifdef LOCAL
-template <class... Ts> void debug_values(const char* names, const Ts&... values) {
-    cerr << "[" << names << "]:";
-    ((cerr << ' ' << values), ...);
-    cerr << '\n';
+template <class A, class B>
+void print_debug(const pair<A, B>& p) {
+    cerr << "(";
+    print_debug(p.first);
+    cerr << ", ";
+    print_debug(p.second);
+    cerr << ")";
 }
+
+template <class T>
+void print_debug(const vector<T>& v) {
+    cerr << "[";
+    for (int i = 0; i < (int)v.size(); i++) {
+        if (i) cerr << ", ";
+        print_debug(v[i]);
+    }
+    cerr << "]";
+}
+
+template <class T>
+void print_debug(const set<T>& s) {
+    cerr << "{";
+    bool first = true;
+    for (auto& x : s) {
+        if (!first) cerr << ", ";
+        first = false;
+        print_debug(x);
+    }
+    cerr << "}";
+}
+
+template <class T>
+void print_debug(const unordered_set<T>& s) {
+    cerr << "{";
+    bool first = true;
+    for (auto& x : s) {
+        if (!first) cerr << ", ";
+        first = false;
+        print_debug(x);
+    }
+    cerr << "}";
+}
+
+template <class K, class V>
+void print_debug(const map<K, V>& mp) {
+    cerr << "{";
+    bool first = true;
+    for (auto& [k, v] : mp) {
+        if (!first) cerr << ", ";
+        first = false;
+        print_debug(k);
+        cerr << ": ";
+        print_debug(v);
+    }
+    cerr << "}";
+}
+
+template <class K, class V>
+void print_debug(const unordered_map<K, V>& mp) {
+    cerr << "{";
+    bool first = true;
+    for (auto& [k, v] : mp) {
+        if (!first) cerr << ", ";
+        first = false;
+        print_debug(k);
+        cerr << ": ";
+        print_debug(v);
+    }
+    cerr << "}";
+}
+
+template <class... Ts>
+void debug_values(const char* names, const Ts&... values) {
+    cerr << "[" << names << "] = ";
+    ((print_debug(values), cerr << " "), ...);
+    cerr << "\n";
+}
+
 #define dbg(...) debug_values(#__VA_ARGS__, __VA_ARGS__)
-#else
-#define dbg(...) ((void)0)
-#endif
-#define pb push_back
+
+struct MyHash {
+    template <typename T>
+    size_t operator()(const vector<T> &vec) {
+        string h;
+
+        for (size_t i = 0; i < vec.size(); i ++) {
+            h += to_string(vec[i]);
+            if (i!= vec.size() - 1) h += "#";
+        }
+
+        return hash<string>{}(h);
+    }
+};
 
 void solve() {
-    // code here
+    vector<string> v(10);
+
+    for (int i = 0; i < 10; i ++) cin >> v[i];
+
+    int points = 0;
+
+    for (int i = 0; i < 10; i ++) {
+        for (int j = 0; j < 10; j ++) {
+            if (v[i][j] == 'X') {
+                points += min({i +1, j + 1, 10 - i, 10 - j});
+            }
+        }
+    }
+
+    cout << points << "\n";
 }
 
 int main() {
@@ -119,7 +168,7 @@ int main() {
     cin.tie(nullptr);
 
     int tests = 1;
-    // cin >> tests;
+    cin >> tests;
     for (int tc = 0; tc < tests; ++tc) solve();
     return 0;
 }
