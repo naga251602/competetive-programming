@@ -24,6 +24,7 @@
 #include <sstream>
 
 
+
 using namespace std;
 using vi = vector<int>;
 using ll = long long;
@@ -49,6 +50,17 @@ template <class T> bool chmax(T& a, const T& b) {
 template <class T>
 void print_debug(const T& x) {
     cerr << x;
+}
+
+template <class... Args>
+void print_debug(const tuple<Args...>& t) {
+    cerr << "(";
+    apply([](const auto&... x) {
+        bool first = true;
+        ((cerr << (exchange(first, false) ? "" : ", "),
+          print_debug(x)), ...);
+    }, t);
+    cerr << ")";
 }
 
 template <class A, class B>
@@ -108,60 +120,54 @@ void print_debug(const map<K, V>& mp) {
     cerr << "}";
 }
 
-template <class K, class V>
-void print_debug(const unordered_map<K, V>& mp) {
-    cerr << "{";
-    bool first = true;
-    for (auto& [k, v] : mp) {
-        if (!first) cerr << ", ";
-        first = false;
-        print_debug(k);
-        cerr << ": ";
-        print_debug(v);
-    }
-    cerr << "}";
-}
-
 template <class... Ts>
 void debug_values(const char* names, const Ts&... values) {
-    cerr << "[" << names << "] = ";
-    ((print_debug(values), cerr << " "), ...);
+    cerr << "[debug] [" << names << "] = ";
+    bool first = true;
+    ((cerr << (exchange(first, false) ? "" : " "), print_debug(values)), ...);
     cerr << "\n";
 }
 
+#ifdef LOCAL
 #define dbg(...) debug_values(#__VA_ARGS__, __VA_ARGS__)
+#else
+#define dbg(...) ((void)0)
+#endif
 
-struct MyHash {
-    template <typename T>
-    size_t operator()(const vector<T> &vec) {
-        string h;
-
-        for (size_t i = 0; i < vec.size(); i ++) {
-            h += to_string(vec[i]);
-            if (i!= vec.size() - 1) h += "#";
-        }
-
-        return hash<string>{}(h);
-    }
-};
-
-void solve() {
-    vector<string> v(10);
-
-    for (int i = 0; i < 10; i ++) cin >> v[i];
-
-    int points = 0;
-
-    for (int i = 0; i < 10; i ++) {
-        for (int j = 0; j < 10; j ++) {
-            if (v[i][j] == 'X') {
-                points += min({i +1, j + 1, 10 - i, 10 - j});
-            }
-        }
-    }
-
-    cout << points << "\n";
+template <class T>
+T minv(const vector<T>& v) {
+    return *min_element(v.begin(), v.end());
 }
+
+template <class T>
+T maxv(const vector<T>& v) {
+    return *max_element(v.begin(), v.end());
+}
+
+void rev(vector<int> &vec, int st, int en) {
+    while (st < en) {
+        swap(vec[st ++], vec[en --]);
+    }
+}
+
+int sumOfSquares(int n) {
+    int s = 0;
+
+    while (n > 0) {
+        int d = (n%10);
+        s += (d * d);
+        n /= 10;
+    }
+
+    return s;
+}
+
+void solve(int t) {
+    vector<int> vec{3, -6, 1};
+
+    cout << '\n';
+}
+
 
 int main() {
     ios::sync_with_stdio(false);
@@ -169,6 +175,6 @@ int main() {
 
     int tests = 1;
     cin >> tests;
-    for (int tc = 0; tc < tests; ++tc) solve();
+    for (int tc = 0; tc < tests; ++tc) solve(tc);
     return 0;
 }
